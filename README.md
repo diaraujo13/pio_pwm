@@ -35,7 +35,7 @@ O movimento do servomotor é limitado entre 0 e 180 graus, enquanto o brilho do 
 
 O vídeo de demonstração do projeto pode ser acessado no link abaixo:
 
-[Link do Vídeo](https://drive.google.com/drive/u/0/folders/1bZOIqWYcuqrScCAlzAkkLm3mHE6zKTyY)
+[Link do Vídeo](https://drive.google.com/file/d/1qWagbbgeSKdMzL1CfXfu9j5zuQgTh0tM/view?usp=drive_link)
 ---
 
 ## Considerações Finais
