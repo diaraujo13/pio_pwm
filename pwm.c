@@ -60,10 +60,17 @@ void servo_set_pos(Servo *servo, int angle)
         angle = 0;
     if (angle > 180)
         angle = 180;
-    uint16_t pulse = servo->pulse_min + ((servo->pulse_max - servo->pulse_min) * angle) / 180;
+
+    const uint16_t pulse = servo->pulse_min + ((servo->pulse_max - servo->pulse_min) * angle) / 180;
     pwm_set_chan_level(servo->slice_num, servo->channel, pulse);
     printf("Posição: %d° (pulse: %d µs)\n", angle, pulse);
 }
+
+void servo_set_pulse(Servo *servo, uint pulse){
+    pwm_set_chan_level(servo->slice_num, servo->channel, pulse);
+    printf("Pulse alterado: %d µs\n", pulse);
+}
+
 
 int main()
 {
@@ -94,22 +101,24 @@ int main()
     int led_brightness = 0;
     int led_fade_factor = 1; // Fator de incremento/decremento do brilho
 
-    int angle = 0;
-    int step = 1;
+    int angle = 500;
+    int step = 5;
+    
     while (true)
     {
-        servo_set_pos(&servo, angle);
-
         // Atualiza o brilho do LED para efeito fade
         led_brightness += led_fade_factor;
         led_fade_factor = (led_brightness >= LED_PWM_WRAP) ? -1
-                                                           : (led_brightness <= 0 ? 1 : led_fade_factor);
+        : (led_brightness <= 0 ? 1 : led_fade_factor);
         led_brightness = (led_brightness >= LED_PWM_WRAP) ? LED_PWM_WRAP
-                                                          : (led_brightness <= 0 ? 0 : led_brightness);
+        : (led_brightness <= 0 ? 0 : led_brightness);
         pwm_set_chan_level(led_slice, led_channel, led_brightness);
         
+        // Atualiza a posição do servo para efeito de movimento
+        servo_set_pulse(&servo, angle);
+
         angle += step;
-        if (angle >= 180 || angle <= 0)
+        if (angle >= 2400 || angle <= 500)
             step = -step;
 
         sleep_ms(SERVO_LOOP_DELAY_MS);
